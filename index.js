@@ -4,8 +4,10 @@
  *  Auth: Muhammad
  * 
  */
-
+// dependencies
 const http = require('http');
+const handler = require('./helpers/reqResHandler');
+
 
 // App Object
 const app = {};
@@ -25,9 +27,7 @@ app.createServer = () => {
 }
 
 // request response controller
-app.handleRequestResponse = (req, res) => {
-    res.end('Hello World!');
-}
+app.handleRequestResponse = handler.handleRequestResponse;
 
 // start server
 app.createServer();
