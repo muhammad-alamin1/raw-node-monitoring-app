@@ -15,8 +15,18 @@ const data = require('./lib/data');
 const app = {};
 
 // testing file system
-data.create('test', 'newFile1', {"name": "Muhammad", "country": "Bangladesh"}, (err) => {
-    console.log(`Error was ${err}`);
+// data.create('test', 'newFile1', {"name": "Muhammad", "country": "Bangladesh"}, (err) => {
+//     console.log(`Error was ${err}`);
+// })
+
+// read
+data.read('test', 'newFile1', (err, data) => {
+    if(!err){
+        const stringData = JSON.parse(data);
+        console.log(stringData);
+    }else{
+        console.log(err);
+    }
 })
 
 // create Server
