@@ -6,23 +6,20 @@
  */
 // dependencies
 const http = require('http');
+const envToExport = require('./helpers/environments');
 const handler = require('./helpers/reqResHandler');
 
 
 // App Object
 const app = {};
 
-// configuration
-app.config = {
-    PORT: 3000,
-};
 
 // create Server
 app.createServer = () => {
     const server = http.createServer(app.handleRequestResponse);
 
-    server.listen(app.config.PORT, () => {
-        console.log(`server listening on http://localhost:${app.config.PORT}`);
+    server.listen(envToExport.PORT, () => {
+        console.log(`server listening on http://localhost:${envToExport.PORT}`);
     })
 }
 

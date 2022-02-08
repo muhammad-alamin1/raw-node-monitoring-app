@@ -33,16 +33,6 @@ handler.handleRequestResponse = (req, res) => {
 
     const chosenHandler = routes[trimmedPath] ? routes[trimmedPath] : pageNotFoundHandler;
 
-    chosenHandler(reqProperties, (statusCode, payload) => {
-        statusCode = typeof(statusCode) === 'number' ? statusCode : 500;
-        payload = typeof(payload) === 'object' ? payload : {};
-
-        const payloadString = JSON.stringify(payload);
-        
-        // final response
-        res.writeHead(statusCode);
-        res.end(payloadString);
-    });
 
     req.on('data', (buffer) => {
         data += decoder.write(buffer);
@@ -50,7 +40,18 @@ handler.handleRequestResponse = (req, res) => {
 
     req.on('end', () => {
         data += decoder.end();
-        console.log(data);
+
+        chosenHandler(reqProperties, (statusCode, payload) => {
+            statusCode = typeof(statusCode) === 'number' ? statusCode : 500;
+            payload = typeof(payload) === 'object' ? payload : {};
+    
+            const payloadString = JSON.stringify(payload);
+            
+            // final response
+            res.writeHead(statusCode);
+            res.end(payloadString);
+        });
+
     })
 
 }
