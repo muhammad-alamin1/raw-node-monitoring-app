@@ -1,7 +1,8 @@
 # Monitoring API (RAW Node)
 
 * API Server
-* Create, Edit, Delete User
+* Create, Edit, Update, Delete User
+* CRUD operation without database, using file system
 * Token based authentication
 * Logout Mechanism
 * Set links & Up or Down links
