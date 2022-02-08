@@ -8,11 +8,16 @@
 const http = require('http');
 const envToExport = require('./helpers/environments');
 const handler = require('./helpers/reqResHandler');
+const data = require('./lib/data');
 
 
 // App Object
 const app = {};
 
+// testing file system
+data.create('test', 'newFile1', {"name": "Muhammad", "country": "Bangladesh"}, (err) => {
+    console.log(`Error was ${err}`);
+})
 
 // create Server
 app.createServer = () => {
