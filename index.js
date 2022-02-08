@@ -15,10 +15,9 @@ const data = require('./lib/data');
 const app = {};
 
 // testing methods
-data.update('test', 'newFile', {"name": "Mucha Mia", "profession": "Software Developer."}, (err) => {
-    console.log(err);
-
-})
+// data.delete('test', 'newFile', (err) => {
+//     console.log(false);
+// })
 
 // create Server
 app.createServer = () => {
