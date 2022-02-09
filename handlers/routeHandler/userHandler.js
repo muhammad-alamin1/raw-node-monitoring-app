@@ -120,7 +120,7 @@ handler._user.get = (requestProperties, callback) => {
     } else {
         callback(404, {
             success: false,
-            error: `Requested user  not found.!`
+            error: `Requested user was not found.!`
         })
     }
 
@@ -128,7 +128,73 @@ handler._user.get = (requestProperties, callback) => {
 
 // put request
 handler._user.put = (requestProperties, callback) => {
+    // check phone number is valid
+    const phone = typeof(requestProperties.body.phone) === 'string'
+        && requestProperties.body.phone.trim().length === 11
+        ? requestProperties.body.phone
+        : false;
+    
+    const firstName = typeof(requestProperties.body.firstName) === 'string' 
+        && requestProperties.body.firstName.trim().length > 0 
+        ? requestProperties.body.firstName
+        : false;
 
+    const lastName = typeof(requestProperties.body.lastName) === 'string' 
+        && requestProperties.body.lastName.trim().length > 0 
+        ? requestProperties.body.lastName
+        : false;
+    
+    const password = typeof(requestProperties.body.password) === 'string'
+        && requestProperties.body.password.trim().length > 0
+        ? requestProperties.body.password
+        : false;
+    
+    if (phone) {
+        if (firstName || lastName || password) {
+            // lookup the user
+            data.read('users', phone, (err, userData) => {
+                const usrData = { ... parseJSON(userData) };
+                
+                if (!err && usrData) {
+                    if (firstName) {
+                        usrData.firstName = firstName;
+                    }
+                    if (lastName) {
+                        usrData.lastName = lastName;
+                    }
+                    if (password) {
+                        usrData.password = hashPassword(password);
+                    }
+
+                    // store updated data to database
+                    data.update('users', phone, usrData, (error) => {
+                        if (!error) {
+                            callback(200, {
+                                success: true,
+                                message: `User was updated successfully.!`
+                            })
+                        } else {
+                            callback(500, {
+                                error: `Problem in the server side!`
+                            })
+                        }
+                    })
+                } else {
+                    callback(400, {
+                        error: `You have a problem in your request. Please try again!`
+                    })
+                }
+            })
+        } else {
+            callback(400, {
+                error: `You have a problem in your request. Please try again!`
+            })
+        }
+    } else {
+        callback(400, {
+            error: 'Invalid phone number. Please try again!'
+        })
+    }
 }
 
 // delete request
