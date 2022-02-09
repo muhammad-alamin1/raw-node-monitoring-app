@@ -1,7 +1,7 @@
 /** User handler -> Route handler to handle user related routes */
 
 // dependencies
-const { hashPassword } = require('../../helpers/utilities');
+const { hashPassword, parseJSON } = require('../../helpers/utilities');
 const data = require('../../lib/data');
 
 // user object
@@ -9,7 +9,7 @@ const handler = {};
 
 
 handler.userHandler = (requestProperties, callback) => {
-    const acceptedMethods = ['get', 'post', 'put', 'delete'];
+    const acceptedMethods = ['post', 'get', 'put', 'delete'];
     if(acceptedMethods.indexOf(requestProperties.method) > -1) {
         handler._user[requestProperties.method](requestProperties, callback);
     } else {
@@ -97,7 +97,33 @@ handler._user.post = (requestProperties, callback) => {
 
 // get request
 handler._user.get = (requestProperties, callback) => {
-    callback(200)
+    // check phone number is valid
+    const phone = typeof(requestProperties.queryStringObj.phone) === 'string'
+        && requestProperties.queryStringObj.phone.trim().length === 11
+        ? requestProperties.queryStringObj.phone
+        : false;
+    
+    if(phone) {
+        // search user by phone number
+        data.read('users', phone, (err, usr) => {
+            const user = { ...parseJSON(usr) };
+            if(!err && user) {
+                delete  user.password;
+                callback(200, user);
+            } else {
+                callback(404, {
+                    success: false,
+                    error: `Requested user was not found.!`
+                })
+            }
+        })
+    } else {
+        callback(404, {
+            success: false,
+            error: `Requested user  not found.!`
+        })
+    }
+
 }
 
 // put request

@@ -19,6 +19,7 @@ handler.handleRequestResponse = (req, res) => {
     const queryStringObj = parsedUrl.query;
     const headerObj = req.headers;
 
+
     // req properties
     const reqProperties = {
         parsedUrl,
