@@ -199,7 +199,41 @@ handler._user.put = (requestProperties, callback) => {
 
 // delete request
 handler._user.delete = (requestProperties, callback) => {
-
+    // check phone number is valid
+    const phone = typeof(requestProperties.queryStringObj.phone) === 'string'
+        && requestProperties.queryStringObj.phone.trim().length === 11
+        ? requestProperties.queryStringObj.phone
+        : false;
+    
+    if (phone) {
+        // search user by phone number
+        data.read('users', phone, (err, user) => {
+            if (!err && user) {
+                data.delete('users', phone, (error) => {
+                    if (!error) {
+                        callback(200, {
+                            success: true,
+                            message: 'User deleted successfully.!`'
+                        })
+                    } else {
+                        callback(500, {
+                            success: false,
+                            error: `There was a server side error.!`
+                        })
+                    }
+                })
+            } else {
+                callback(500, {
+                    success: false,
+                    error: `There was a server side error.!`
+                })
+            }
+        })
+    } else {
+        callback(400, {
+            error: `A problem in your request.!`
+        })
+    }
 }
 
 
