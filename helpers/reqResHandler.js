@@ -48,6 +48,7 @@ handler.handleRequestResponse = (req, res) => {
             const payloadString = JSON.stringify(payload);
             
             // final response
+            res.setHeader('Content-Type', 'application/json');
             res.writeHead(statusCode);
             res.end(payloadString);
         });

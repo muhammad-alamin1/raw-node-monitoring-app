@@ -2,10 +2,12 @@
 
 // dependencies
 const { sampleHandler } = require("./handlers/routeHandler/sampleHandler");
+const { userHandler } = require("./handlers/routeHandler/userHandler");
 
 // route object
 const routes = {
-    sample : sampleHandler
+    sample : sampleHandler,
+    user : userHandler
 }
 
 
