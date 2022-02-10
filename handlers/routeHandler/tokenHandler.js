@@ -18,7 +18,7 @@ handler.tokenHandler = (requestProperties, callback) => {
 handler._token = {};
 
 
-// create a new token 
+// creat token handler post method 
 handler._token.post = (requestProperties, callback) => {
     const phone = typeof(requestProperties.body.phone) === 'string'
         && requestProperties.body.phone.trim().length === 11
@@ -67,8 +67,33 @@ handler._token.post = (requestProperties, callback) => {
     }
 }
 
+// get token
 handler._token.get = (requestProperties, callback) => {
+    // check id is valid
+    const id = typeof(requestProperties.queryStringObj.id) === 'string'
+        && requestProperties.queryStringObj.id.trim().length === 25
+        ? requestProperties.queryStringObj.id
+        : false;
     
+    if(id) {
+        // lookup the token
+        data.read('tokens', id, (err, tokenData) => {
+            const token = { ...parseJSON(tokenData) };
+            if(!err && token) {
+                callback(200, token);
+            } else {
+                callback(404, {
+                    success: false,
+                    error: `your requested token could not be found.!`
+                })
+            }
+        })
+    } else {
+        callback(404, {
+            success: false,
+            error: `your requested token could not be found.!`
+        })
+    }
 }
 
 handler._token.put = (requestProperties, callback) => {
