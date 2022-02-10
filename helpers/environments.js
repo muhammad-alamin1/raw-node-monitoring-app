@@ -5,7 +5,7 @@
 const environments = {};
 
 environments.staging = {
-    PORT: 3000,
+    PORT: 8000,
     envName: 'staging',
     secretKey: 'lasl928lkjfd@lks$lkaskdj983lkdj4klac@!lksd!lkds'
 }

@@ -32,4 +32,25 @@ utilities.hashPassword = (str) => {
     return false;
 }
 
+// crate random string
+utilities.createRandomString = (stringLength) => {
+    let len  = stringLength;
+    len = typeof(stringLength) === 'number'
+        && stringLength > 0 ? stringLength : false;
+    
+    if(len) {
+        let possibleChar = `abckefghijklmnopqrstwxyz1234567890`;
+
+        let output = ``;
+        for(let i=1; i<= len; i++) {
+            let randomChar = possibleChar.charAt(Math.floor(Math.random() * possibleChar.length));
+
+            output += randomChar;
+        }
+        return output;
+    } 
+    return false;
+
+}
+
 module.exports = utilities;

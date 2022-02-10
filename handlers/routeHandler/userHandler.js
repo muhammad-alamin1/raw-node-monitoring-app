@@ -95,6 +95,7 @@ handler._user.post = (requestProperties, callback) => {
     }
 }
 
+// TODO -> check authentication
 // get request
 handler._user.get = (requestProperties, callback) => {
     // check phone number is valid
@@ -126,6 +127,7 @@ handler._user.get = (requestProperties, callback) => {
 
 }
 
+// TODO -> check authentication
 // put request
 handler._user.put = (requestProperties, callback) => {
     // check phone number is valid
@@ -197,6 +199,7 @@ handler._user.put = (requestProperties, callback) => {
     }
 }
 
+// TODO -> check authentication
 // delete request
 handler._user.delete = (requestProperties, callback) => {
     // check phone number is valid
