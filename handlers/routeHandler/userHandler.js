@@ -226,8 +226,8 @@ handler._user.put = (requestProperties, callback) => {
     }
 }
 
-// TODO -> check authentication
-// delete request
+
+// delete request check authentication
 handler._user.delete = (requestProperties, callback) => {
     // check phone number is valid
     const phone = typeof(requestProperties.queryStringObj.phone) === 'string'
@@ -236,29 +236,42 @@ handler._user.delete = (requestProperties, callback) => {
         : false;
     
     if (phone) {
-        // search user by phone number
-        data.read('users', phone, (err, user) => {
-            if (!err && user) {
-                data.delete('users', phone, (error) => {
-                    if (!error) {
-                        callback(200, {
-                            success: true,
-                            message: 'User deleted successfully.!`'
-                        })
-                    } else {
-                        callback(500, {
-                            success: false,
-                            error: `There was a server side error.!`
-                        })
-                    }
-                })
-            } else {
-                callback(500, {
-                    success: false,
-                    error: `There was a server side error.!`
-                })
-            }
-        })
+        // check verify authentication token
+        let token = typeof(requestProperties.headerObj.token) === 'string'
+            ? requestProperties.headerObj.token : false;
+
+            tokenHandler._token.verify(token, phone, (tokenId) => {
+                if(tokenId) {
+                    // search user by phone number
+                    data.read('users', phone, (err, user) => {
+                        if (!err && user) {
+                            data.delete('users', phone, (error) => {
+                                if (!error) {
+                                    callback(200, {
+                                        success: true,
+                                        message: 'User deleted successfully.!`'
+                                    })
+                                } else {
+                                    callback(500, {
+                                        success: false,
+                                        error: `There was a server side error.!`
+                                    })
+                                }
+                            })
+                        } else {
+                            callback(500, {
+                                success: false,
+                                error: `There was a server side error.!`
+                            })
+                        }
+                    })
+                } else {
+                    callback(403, { // unauthorize user
+                        error: `Authentication Failed.!`
+                    })
+                }
+            })
+            
     } else {
         callback(400, {
             error: `A problem in your request.!`
