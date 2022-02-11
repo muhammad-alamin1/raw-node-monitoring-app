@@ -96,8 +96,8 @@ handler._user.post = (requestProperties, callback) => {
     }
 }
 
-// TODO -> check authentication
-// get request
+
+// get request check authentication
 handler._user.get = (requestProperties, callback) => {
     // check phone number is valid
     const phone = typeof(requestProperties.queryStringObj.phone) === 'string'
@@ -141,8 +141,8 @@ handler._user.get = (requestProperties, callback) => {
 
 }
 
-// TODO -> check authentication
-// put request
+
+// put request check authentication
 handler._user.put = (requestProperties, callback) => {
     // check phone number is valid
     const phone = typeof(requestProperties.body.phone) === 'string'
@@ -167,40 +167,53 @@ handler._user.put = (requestProperties, callback) => {
     
     if (phone) {
         if (firstName || lastName || password) {
-            // lookup the user
-            data.read('users', phone, (err, userData) => {
-                const usrData = { ... parseJSON(userData) };
-                
-                if (!err && usrData) {
-                    if (firstName) {
-                        usrData.firstName = firstName;
-                    }
-                    if (lastName) {
-                        usrData.lastName = lastName;
-                    }
-                    if (password) {
-                        usrData.password = hashPassword(password);
-                    }
+            // check verify authentication token
+            let token = typeof(requestProperties.headerObj.token) === 'string'
+            ? requestProperties.headerObj.token : false;
 
-                    // store updated data to database
-                    data.update('users', phone, usrData, (error) => {
-                        if (!error) {
-                            callback(200, {
-                                success: true,
-                                message: `User was updated successfully.!`
+            tokenHandler._token.verify(token, phone, (tokenId) => {
+                if(tokenId) {
+                    // lookup the user
+                    data.read('users', phone, (err, userData) => {
+                        const usrData = { ... parseJSON(userData) };
+                        
+                        if (!err && usrData) {
+                            if (firstName) {
+                                usrData.firstName = firstName;
+                            }
+                            if (lastName) {
+                                usrData.lastName = lastName;
+                            }
+                            if (password) {
+                                usrData.password = hashPassword(password);
+                            }
+
+                            // store updated data to database
+                            data.update('users', phone, usrData, (error) => {
+                                if (!error) {
+                                    callback(200, {
+                                        success: true,
+                                        message: `User was updated successfully.!`
+                                    })
+                                } else {
+                                    callback(500, {
+                                        error: `Problem in the server side!`
+                                    })
+                                }
                             })
                         } else {
-                            callback(500, {
-                                error: `Problem in the server side!`
+                            callback(400, {
+                                error: `You have a problem in your request. Please try again!`
                             })
                         }
                     })
                 } else {
-                    callback(400, {
-                        error: `You have a problem in your request. Please try again!`
+                    callback(403, { // unauthorize user
+                        error: `Authentication Failed.!`
                     })
                 }
             })
+
         } else {
             callback(400, {
                 error: `You have a problem in your request. Please try again!`
