@@ -141,8 +141,43 @@ handler._token.put = (requestProperties, callback) => {
     }
 }
 
+// delete token
 handler._token.delete = (requestProperties, callback) => {
-    
+        // check id is valid
+    const id = typeof(requestProperties.queryStringObj.id) === 'string'
+        && requestProperties.queryStringObj.id.trim().length === 25
+        ? requestProperties.queryStringObj.id
+        : false;
+
+    if (id) {
+        // search user by phone number
+        data.read('tokens', id, (err, token) => {
+            if (!err && token) {
+                data.delete('tokens', id, (error) => {
+                    if (!error) {
+                        callback(200, {
+                            success: true,
+                            message: 'token deleted successfully.!`'
+                        })
+                    } else {
+                        callback(500, {
+                            success: false,
+                            error: `There was a server side error.!`
+                        })
+                    }
+                })
+            } else {
+                callback(500, {
+                    success: false,
+                    error: `There was a server side error.!`
+                })
+            }
+        })
+    } else {
+        callback(400, {
+            error: `A problem in your request.!`
+        })
+    }    
 }
 
 
