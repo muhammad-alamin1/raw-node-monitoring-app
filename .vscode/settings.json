@@ -1,0 +1,12 @@
+{
+    "better-comments.multilineComments": true,
+    "better-comments.highlightPlainText": false,
+    "editor.cursorSmoothCaretAnimation": true,
+    "editor.formatOnPaste": true,
+    "editor.formatOnSave": true,
+    "workbench.list.smoothScrolling": true,
+    "editor.cursorStyle": "block",
+    "editor.bracketPairColorization.enabled": true,
+    "editor.mouseWheelZoom": true,
+    "editor.cursorBlinking": "expand"
+}
