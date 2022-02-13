@@ -21,7 +21,7 @@
 
 <h4>User Related routes<h4>
 
-    <h6>Create user<h6>
+    1. Create user :
 
         * url: http://localhost:8000/user
         * method: POST
@@ -32,5 +32,18 @@
                 "lastName": "Doe",
                 "phone": "01311111111",
                 "password": "YYYY",
+                "toAgreement": true,
+            }
+
+    2. Get user :
+
+        * url: http://localhost:8000/user?phone=01311111111
+        * method: GET
+        * Authentication check! Create token & set headers(like dictionary) key=token, value=htb76qi7ajmkc7lq17qrtrtb6
+        * Output data like this:
+            {
+                "firstName": "John",
+                "lastName": "Doe",
+                "phone": "01311111111",
                 "toAgreement": true,
             }
