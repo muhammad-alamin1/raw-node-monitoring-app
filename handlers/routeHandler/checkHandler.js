@@ -175,7 +175,96 @@ handler._check.get = (requestProperties, callback) => {
 };
 
 handler._check.put = (requestProperties, callback) => {
+    // @params id
+    const id = typeof(requestProperties.body.id === 'string')
+        && requestProperties.body.id.trim().length === 25
+        ? requestProperties.body.id : false;
+        // console.log(id);
+    
+        // valid input 
+    let protocol = typeof(requestProperties.body.protocol) === 'string'
+        && ['http', 'https'].indexOf(requestProperties.body.protocol) > -1
+        ? requestProperties.body.protocol : false;
+    
+    let url = typeof(requestProperties.body.url) === 'string'
+        && requestProperties.body.url.trim().length > 0
+        ? requestProperties.body.url : false;
+    
+    let method = typeof(requestProperties.body.method) === 'string'
+        && ['GET', 'POST', 'PUT', 'DELETE'].indexOf(requestProperties.body.method) > -1
+        ? requestProperties.body.method : false;
+    
+    let successCode = typeof(requestProperties.body.successCode) === 'object'
+        && requestProperties.body.successCode instanceof Array 
+        ? requestProperties.body.successCode : false;
+    
+    let timeOutSeconds = typeof(requestProperties.body.timeOutSeconds) === 'number' 
+        && requestProperties.body.timeOutSeconds % 1 === 0 
+        && requestProperties.body.timeOutSeconds >= 1
+        && requestProperties.body.timeOutSeconds <= 5
+        ? requestProperties.body.timeOutSeconds : false;
 
+    if(id) {
+        if(protocol || url || method || successCode || timeOutSeconds) {
+            data.read('checks', id, (error, checksData) => {
+                if(!error && checksData) {
+                    let checkObj = parseJSON(checksData);
+
+                     // check verify authentication token
+                    let token = typeof(requestProperties.headerObj.token) === 'string'
+                        ? requestProperties.headerObj.token : false;
+
+                    // verify token
+                    tokenHandler._token.verify(token, checkObj.userPhone, (tokenIsValid) =>{
+                        if(tokenIsValid) {
+                            if(protocol) {
+                                checkObj.protocol = protocol;
+                            }
+                            if(url) {
+                                checkObj.url = url;
+                            }
+                            if(method) {
+                                checkObj.method = method;
+                            }
+                            if(successCode) {
+                                checkObj.successCode = successCode;
+                            }
+                            if(timeOutSeconds) {
+                                checkObj.timeOutSeconds = timeOutSeconds;
+                            }
+                            
+                            // store the updated data 
+                            data.update('checks', id, checkObj, (err1) => {
+                                if(!err1) {
+                                    callback(200);
+                                } else {
+                                    callback(500, {
+                                        error: `There was a server side error.!`
+                                    })
+                                }
+                            })
+                        } else {
+                            callback(403, {
+                                error: `Authentication Failed.!`
+                             })
+                        }
+                    })
+                } else {
+                    callback(500, {
+                        error: `There was a problem in out server side.!`
+                    })
+                }
+            })
+        } else {
+            callback(400, {
+                error: `You must be provide at least one field to update.!`
+            })
+        }
+    } else {
+        callback(400, {
+            error: `You have a problem in your request. Please try again!`
+        })
+    }
 };
 
 handler._check.delete = (requestProperties, callback) => {
