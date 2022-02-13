@@ -11,11 +11,9 @@
 
 <h3>How to use this application</h3>
 
-    * Postman has been used as client side for this application
-    * This application run production & local. We run this application http://localhost:8000
-    * This application all routes are available -->
-        <ul>
-            <li>http://localhost:8000/user</li>
-            <li>http://localhost:8000/token</li>
-            <li>http://localhost:8000/check</li>
-        </ul>
+    ** Postman has been used as client side for this application
+    ** This application run production & local. We run this application http://localhost:8000
+    ** This application all routes are available -->
+        * http://localhost:8000/user
+        * http://localhost:8000/token
+        * http://localhost:8000/check
