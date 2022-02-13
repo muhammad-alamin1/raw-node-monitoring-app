@@ -12,7 +12,7 @@
 <h3>How to use this application</h3>
 <p>Clone git -> https://github.com/muhammad-alamin1/raw-node-monitoring-app.git</p>
 
-    ** Postman has been used as client side for this application
+    Postman has been used as client side for this application
     ** This application run production & local. We run this application http://localhost:8000
     ** This application all routes are available -->
         * http://localhost:8000/user
@@ -22,9 +22,9 @@
 <h4>User Related routes<h4>
 
     <p>Create user<p>
-        * url: http://localhost:8000
+        * url: http://localhost:8000/user
         * method: POST
-        * requirements data --> firstName(string), lastName(string), phone(string), password(string),    toAgreement(boolean)
+        * requirements data --> firstName(string), lastName(string), phone(string), password(string),toAgreement(boolean)
         * Postman body data like this & hit enter:
             {
                 "firstName": "John",
@@ -33,4 +33,3 @@
                 "password": "YYYY",
                 "toAgreement": true,
             }
-
