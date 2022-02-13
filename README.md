@@ -47,3 +47,26 @@
                 "phone": "01311111111",
                 "toAgreement": true,
             }
+
+     3. Update user :
+
+        * url: http://localhost:8000/user
+        * method: PUT
+        * Phone number is primary key
+        * Authentication check! Create token & set headers(like dictionary) key=token, value=htb76qi7ajmkc7lq17qrtrtb6
+        * We must be send body one updated field
+            {
+                "firstName": "Abdur",
+                "lastName": "Rahman",
+                "phone": "01311111111",
+                "password": "XXX"
+            }
+
+     4. Delete user :
+
+        * url: http://localhost:8000/user?phone=01311111111
+        * method: DELETE
+        * Phone number is primary key
+        * Authentication check! Create token & set headers(like dictionary) key=token, value=htb76qi7ajmkc7lq17qrtrtb6
+
+<h4>Token Related routes<h4>
