@@ -22,6 +22,7 @@
 <h4>User Related routes<h4>
 
     <h6>Create user<h6>
+
         * url: http://localhost:8000/user
         * method: POST
         * requirements data --> firstName(string), lastName(string), phone(string), password(string),toAgreement(boolean)
