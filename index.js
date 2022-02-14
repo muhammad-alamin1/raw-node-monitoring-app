@@ -8,7 +8,7 @@
 const http = require('http');
 const envToExport = require('./helpers/environments');
 const handler = require('./helpers/reqResHandler');
-const data = require('./lib/data');
+const { sendTwilioSms } = require('./helpers/notification');
 
 
 // App Object

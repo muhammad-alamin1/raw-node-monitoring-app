@@ -54,7 +54,7 @@
         * method: PUT
         * Phone number is primary key
         * Authentication check! Create token & set headers(like dictionary) key=token, value=htb76qi7ajmkc7lq17qrtrtb6
-        * We must be send body one updated field
+        * We must be send one updated field, postman body data like this:
             {
                 "firstName": "Abdur",
                 "lastName": "Rahman",
